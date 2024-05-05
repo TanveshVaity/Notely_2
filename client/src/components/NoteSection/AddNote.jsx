@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addNote, clearNote } from "../../features/note/noteSlice";
 
 const AddNote = ({onClose}) => {
-    const notes = useSelector(state => state.note.notes);
     const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState("Personal");

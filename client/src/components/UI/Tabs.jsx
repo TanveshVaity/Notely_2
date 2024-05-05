@@ -1,7 +1,9 @@
-import { Fragment, useState } from "react";
+import { Fragment , useState} from "react";
 import NoteList from "../NoteSection/NoteList";
+import  {useSelector} from "react-redux"
 
-const Tabs = ({ notes }) => {
+const Tabs = ({ notes, isChecked }) => {
+  const completedNotes = useSelector(state => state.note.completedNotes);
   const [activeTab, setActiveTab] = useState("all");
 
   const handleChangeTabs = (tab) => {
@@ -11,13 +13,13 @@ const Tabs = ({ notes }) => {
   const getNotesForTab = () => {
     switch (activeTab) {
       case "all":
-        return notes;
+        return isChecked ? completedNotes : notes;
       case "home":
-        return notes.filter((note) => note.category === "Home");
+        return isChecked ? completedNotes.filter(note => note.category === "Home") : notes.filter(note => note.category === "Home");
       case "business":
-        return notes.filter((note) => note.category === "Business");
+        return isChecked ? completedNotes.filter(note =>  note.category === "Business") : notes.filter(note => note.category === "Business");
       case "personal":
-        return notes.filter((note) => note.category === "Personal");
+        return isChecked ? completedNotes.filter(note =>  note.category === "Personal") : notes.filter(note => note.category === "Personal");
       default:
         return [];
     }
@@ -74,7 +76,7 @@ const Tabs = ({ notes }) => {
         >
           BUSINESS
         </button>
-        <NoteList notes={getNotesForTab()} />
+        <NoteList notes={getNotesForTab()} isChecked={isChecked} />
       </div>
     </Fragment>
   );
