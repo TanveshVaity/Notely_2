@@ -1,13 +1,16 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Tabs from './components/UI/Tabs';
 import Backdrop from './components/UI/Backdrop';
 import AddNote from './components/NoteSection/AddNote';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { useSelector } from "react-redux";
+import { useSelector , useDispatch} from "react-redux";
+import { fetchNotes } from './features/note/noteSlice';
 
 function MainPage() {
+  const dispatch = useDispatch();
   const notes = useSelector(state => state.note.notes);
+  console.log(notes);
   const [isAddNoteVisible, setIsAddNoteVisible] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
@@ -18,6 +21,10 @@ function MainPage() {
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   }
+
+  useEffect(()=>{
+    dispatch(fetchNotes())
+  },[dispatch])
 
   return (
     <Fragment>

@@ -16,8 +16,8 @@ const Tabs = ({ notes, isChecked }) => {
         return isChecked ? completedNotes : notes;
       case "home":
         return isChecked ? completedNotes.filter(note => note.category === "Home") : notes.filter(note => note.category === "Home");
-      case "business":
-        return isChecked ? completedNotes.filter(note =>  note.category === "Business") : notes.filter(note => note.category === "Business");
+      case "buisness":
+        return isChecked ? completedNotes.filter(note =>  note.category === "Buisness") : notes.filter(note => note.category === "Buisness");
       case "personal":
         return isChecked ? completedNotes.filter(note =>  note.category === "Personal") : notes.filter(note => note.category === "Personal");
       default:
@@ -71,10 +71,10 @@ const Tabs = ({ notes, isChecked }) => {
               : "border-b-gray-400 border-b-[3px] text-gray-400"
           }`}
           onClick={() => {
-            handleChangeTabs("business");
+            handleChangeTabs("buisness");
           }}
         >
-          BUSINESS
+          BUISNESS
         </button>
         <NoteList notes={getNotesForTab()} isChecked={isChecked} />
       </div>

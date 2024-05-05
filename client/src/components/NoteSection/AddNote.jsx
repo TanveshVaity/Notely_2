@@ -76,7 +76,7 @@ const AddNote = ({onClose}) => {
                                 </button>
                                 {isOpen && (
                                     <div className="bg-gray-300 absolute top-[5rem] rounded-lg left-0 w-full z-10 pt-2 pb-2">
-                                        <p className="cursor-pointer px-2 py-2 leading-6 hover:bg-gray-400" onClick={()=>handleCategoryChange("Psersonal")}>
+                                        <p className="cursor-pointer px-2 py-2 leading-6 hover:bg-gray-400" onClick={()=>handleCategoryChange("Personal")}>
                                             Personal
                                         </p>
                                         <p className="cursor-pointer px-2 py-2 leading-6 hover:bg-gray-400" onClick={()=>handleCategoryChange("Home")}>
