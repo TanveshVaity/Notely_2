@@ -1,7 +1,7 @@
 package com.notely.notely.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,15 +20,17 @@ public class Note {
 
     private String content;
 
+    private String category;
+
+    @Column(name = "is_completed")
+    private boolean completed = false;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
 
     @PrePersist
     protected void onCreate() {
@@ -41,3 +43,4 @@ public class Note {
         this.updatedAt = LocalDateTime.now();
     }
 }
+
