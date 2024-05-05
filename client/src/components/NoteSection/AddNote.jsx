@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { FaCaretUp, FaCaretDown } from "react-icons/fa";
+import { useSelector, useDispatch } from 'react-redux';
+import { addNote, clearNote } from "../../features/note/noteSlice";
 
 const AddNote = ({onClose}) => {
+    const notes = useSelector(state => state.note.notes);
+    const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState("Personal");
     const [textCount, setTextCount] = useState(0);
@@ -26,16 +30,13 @@ const AddNote = ({onClose}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // const title = (e.currentTarget.elements.namedItem('title') as HTMLInputElement).value;
-        // const description = textarea;
-        // const category = selectedCategory;
-
-        // try {
-        //     const note = await axios.post("/api/note/add-note", { title, description, category });
-        //     onClose();
-        // } catch (error) {
-        //     console.log("Failed to add note", error.message);
-        // }
+        dispatch(addNote({
+            title,
+            content : textarea,
+            category : selectedCategory,
+        }));
+        dispatch(clearNote());
+        onClose();
     };
 
     return (
