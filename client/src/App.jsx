@@ -10,7 +10,6 @@ import { fetchNotes } from './features/note/noteSlice';
 function MainPage() {
   const dispatch = useDispatch();
   const notes = useSelector(state => state.note.notes);
-  console.log(notes);
   const [isAddNoteVisible, setIsAddNoteVisible] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 

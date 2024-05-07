@@ -13,7 +13,7 @@ const Tabs = ({ notes, isChecked }) => {
   const getNotesForTab = () => {
     switch (activeTab) {
       case "all":
-        return isChecked ? completedNotes : notes;
+        return isChecked ? notes.filter(note => note.completed) : notes;
       case "home":
         return isChecked ? completedNotes.filter(note => note.category === "Home") : notes.filter(note => note.category === "Home");
       case "buisness":

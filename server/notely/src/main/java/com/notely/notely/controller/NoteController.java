@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.notely.notely.entity.Note;
 import com.notely.notely.service.NoteService;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -41,5 +44,9 @@ public class NoteController {
     public ResponseEntity<String> deleteNote(@PathVariable UUID id) {
         return noteService.deleteNote(id);
     }
-    
+
+    @PutMapping("/update-completion/{id}")
+    public ResponseEntity<String> updateNoteIsComplete(@PathVariable UUID id, @RequestParam(required = false) Boolean completed) {
+        return noteService.updateNoteIsComplete(id, completed);
+    }
 }

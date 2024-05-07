@@ -1,10 +1,10 @@
 import { Fragment, useState } from "react";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { useDispatch } from 'react-redux';
-import { addCompletedNote } from "../../features/note/noteSlice";
+import { updateNoteCompleted, deleteNote as deleteNoteAction } from "../../features/note/noteSlice";
 
 const Note = ({ note }) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch();    
     const { id, title, content, category } = note;
     const maxWords = 6;
     const words = title.split(" ");
@@ -18,12 +18,13 @@ const Note = ({ note }) => {
 
     const handleCheckCompleted = () => {
         setIsCompleted(!isCompleted);
-        if (!isCompleted) {
-            dispatch(addCompletedNote(note));
-        } else {
-            dispatch(removeCompletedNote(id));
-        }
+        dispatch(updateNoteCompleted({ noteId: id, isCompleted}));
+        console.log(isCompleted, id);
     };
+
+    const deleteNote = () =>{
+        dispatch(deleteNoteAction(id));
+    }
 
 
     return (
@@ -47,7 +48,7 @@ const Note = ({ note }) => {
                             checked={isCompleted}
                         />
                         <MdEdit size={20} />
-                        <MdDelete size={20} />
+                        <MdDelete onClick={deleteNote} size={20} />
                     </div>
                 </div>
                 <p

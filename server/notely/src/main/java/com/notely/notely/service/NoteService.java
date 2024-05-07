@@ -3,6 +3,7 @@ package com.notely.notely.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -47,4 +48,22 @@ public class NoteService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete note");
         }
     }
+
+    public ResponseEntity<String> updateNoteIsComplete(UUID id, boolean completed) {
+        try {
+            Optional<Note> noteOptional = noteRespository.findById(id);
+            if (noteOptional.isPresent()) {
+                Note note = noteOptional.get();
+                note.setCompleted(completed);
+                noteRespository.save(note);
+                return ResponseEntity.status(HttpStatus.OK).body("Note updated successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Note not found");
+            }
+        } catch (DataAccessException ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update note");
+        }
+    }
 }
+
