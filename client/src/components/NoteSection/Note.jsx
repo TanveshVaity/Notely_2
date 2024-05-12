@@ -1,7 +1,9 @@
 import { Fragment, useState } from "react";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { useDispatch } from 'react-redux';
-import { updateNoteCompleted, deleteNote as deleteNoteAction } from "../../features/note/noteSlice";
+import { updateNoteCompleted, deleteNote} from "../../features/note/noteSlice";
+import NoteForm from "./NoteForm";
+import Backdrop from "../UI/Backdrop";
 
 const Note = ({ note }) => {
     const dispatch = useDispatch();    
@@ -15,6 +17,7 @@ const Note = ({ note }) => {
         Buisness: "text-purple-900 bg-purple-200"
     };
     const [isCompleted, setIsCompleted] = useState(false);
+    const [isEditFormVisible, setIsEditFormVisible] = useState(false);
 
     const handleCheckCompleted = () => {
         setIsCompleted(!isCompleted);
@@ -22,10 +25,17 @@ const Note = ({ note }) => {
         console.log(isCompleted, id);
     };
 
-    const deleteNote = () =>{
-        dispatch(deleteNoteAction(id));
-    }
+    const handleDeleteNote = () => {
+        dispatch(deleteNote(id));
+    };
 
+    const handleEditNote = () => {
+        setIsEditFormVisible(true);
+    };
+
+    const handleCloseEditForm = () => {
+        setIsEditFormVisible(false);
+    };
 
     return (
         <Fragment>
@@ -47,8 +57,8 @@ const Note = ({ note }) => {
                             type="checkbox"
                             checked={isCompleted}
                         />
-                        <MdEdit size={20} />
-                        <MdDelete onClick={deleteNote} size={20} />
+                        <MdEdit size={20} onClick={handleEditNote} />
+                        <MdDelete onClick={handleDeleteNote} size={20} />
                     </div>
                 </div>
                 <p
@@ -69,6 +79,11 @@ const Note = ({ note }) => {
                     20.01.2023
                 </span>
             </div>
+            {isEditFormVisible && (
+                <Backdrop isOpen={isEditFormVisible} onClose={handleCloseEditForm}>
+                    <NoteForm onClose={handleCloseEditForm} type="edit" category={category} noteId={id} note={note}/>
+                </Backdrop>
+            )}
         </Fragment>
     );
 };

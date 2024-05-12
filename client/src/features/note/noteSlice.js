@@ -28,10 +28,10 @@ export const addNote = createAsyncThunk('/addNote', async (note) => {
 
 export const updateNoteCompleted = createAsyncThunk(
   '/updateNoteCompleted',
-  async (noteId, isCompleted) => {
+  async ({ noteId, isCompleted }) => {
     try {
       await axios.put(`http://localhost:8080/api/update-completion/${noteId}`, isCompleted);
-      return {noteId, isCompleted};
+      return { noteId, isCompleted };
     } catch (error) {
       throw error;
     }
@@ -40,7 +40,7 @@ export const updateNoteCompleted = createAsyncThunk(
 
 export const deleteNote = createAsyncThunk(
   "/deleteNote",
-  async(noteId) => {
+  async (noteId) => {
     try {
       await axios.delete(`http://localhost:8080/api/delete-note/${noteId}`);
       return noteId;
@@ -48,7 +48,19 @@ export const deleteNote = createAsyncThunk(
       throw error;
     }
   }
-)
+);
+
+export const updateNote = createAsyncThunk(
+  '/updateNote',
+  async (note) => {
+    try {
+      const response = await axios.put(`http://localhost:8080/api/update-note/${note.id}`, note);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 export const noteSlice = createSlice({
   name: 'note',
@@ -86,16 +98,23 @@ export const noteSlice = createSlice({
       })
 
       .addCase(updateNoteCompleted.fulfilled, (state, action) => {
-        const noteId = action.payload;
-        const noteToUpdate = state.notes.find(note => note.id === noteId);
+        const { noteId, isCompleted } = action.payload;
+        const noteToUpdate = state.notes.find((note) => note.id === noteId);
         if (noteToUpdate) {
           noteToUpdate.completed = isCompleted;
         }
-      })
+      })      
 
       .addCase(deleteNote.fulfilled, (state, action) =>{
         const noteId = action.payload;
         state.notes = state.notes.filter(note => note.id !== noteId);
+      })
+
+      .addCase(updateNote.fulfilled, (state, action) => {
+        const updatedNote = action.payload;
+        state.notes = state.notes.map(note =>
+          note.id === updatedNote.id ? updatedNote : note
+        );
       })
   },
 });

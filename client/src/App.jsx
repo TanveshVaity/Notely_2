@@ -2,10 +2,10 @@ import { Fragment, useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Tabs from './components/UI/Tabs';
 import Backdrop from './components/UI/Backdrop';
-import AddNote from './components/NoteSection/AddNote';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useSelector , useDispatch} from "react-redux";
 import { fetchNotes } from './features/note/noteSlice';
+import NoteForm from './components/NoteSection/NoteForm';
 
 function MainPage() {
   const dispatch = useDispatch();
@@ -23,14 +23,14 @@ function MainPage() {
 
   useEffect(()=>{
     dispatch(fetchNotes())
-  },[dispatch])
+  },[dispatch, notes])
 
   return (
     <Fragment>
       <Navbar onOpen={toggleAddNote} />
       {isAddNoteVisible && (
         <Backdrop isOpen={isAddNoteVisible} onClose={toggleAddNote}>
-          <AddNote onClose={toggleAddNote} />
+          <NoteForm onClose={toggleAddNote} type="add"/>
         </Backdrop>
       )}
       <div className="pl-10 pt-4 relative">

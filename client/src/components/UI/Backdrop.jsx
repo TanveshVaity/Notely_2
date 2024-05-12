@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import ReactDOM from 'react-dom/client'
 
 const Backdrop = ({ isOpen, children }) => {
     return (

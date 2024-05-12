@@ -1,39 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
 import { FaCaretUp, FaCaretDown } from "react-icons/fa";
-import { useSelector, useDispatch } from 'react-redux';
-import { addNote, clearNote } from "../../features/note/noteSlice";
+import { useDispatch } from 'react-redux';
+import { addNote, clearNote, updateNote } from "../../features/note/noteSlice";
 
-const AddNote = ({onClose}) => {
+const NoteForm = ({ onClose, type, category , noteId, note}) => {
     const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState("Personal");
     const [textCount, setTextCount] = useState(0);
-    const [textarea, setTextarea] = useState("");
-    const [title, setTitle] = useState("");
+    const [textarea, setTextarea] = useState(note.content);
+    const [title, setTitle] = useState(note.title);
+
+    
+    useEffect(() => {
+        setSelectedCategory(category);
+    }, [category]);
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category);
         setIsOpen(false);
     };
 
-    const MAX_CHARACTER_COUNT = 200; 
+    const MAX_CHARACTER_COUNT = 200;
 
     const handleTextAreaChange = (e) => {
         const newText = e.target.value;
-        if (newText.length <= MAX_CHARACTER_COUNT) { 
-        setTextarea(newText);
-        setTextCount(newText.length); 
+        if (newText.length <= MAX_CHARACTER_COUNT) {
+            setTextarea(newText);
+            setTextCount(newText.length);
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(addNote({
-            title,
-            content : textarea,
-            category : selectedCategory,
-        }));
+        if (type === "add") {
+            dispatch(addNote({
+                title,
+                content: textarea,
+                category: selectedCategory,
+            }));
+        } else {
+            dispatch(updateNote({
+                id: noteId,
+                title,
+                content: textarea,
+                category: selectedCategory,
+            }));
+            console.log("note updated")
+        }
         dispatch(clearNote());
         onClose();
     };
@@ -44,10 +59,10 @@ const AddNote = ({onClose}) => {
                 <div className="h-[400px] w-[500px] p-4 rounded-2xl border flex flex-col justify-between bg-white">
                     <div className="flex flex-col justify-between pt-3">
                         <div className="flex justify-between items-center text-lg">
-                            <span className="text-gray-900 opacity-85 font-bold">Add Note</span>
+                            <span className="text-gray-900 opacity-85 font-bold">{type === "add" ? "Add Note" : "Edit Note"}</span>
                             <IoMdClose onClick={onClose} className="text-gray-600 cursor-pointer" />
-                            </div>
-                            <div className="mt-4 flex justify-between">
+                        </div>
+                        <div className="mt-4 flex justify-between">
                             <div className="flex flex-col">
                                 <label htmlFor="title">Title</label>
                                 <input
@@ -64,25 +79,24 @@ const AddNote = ({onClose}) => {
                             <div className="relative flex flex-col w-[200px]">
                                 <p>Category</p>
                                 <button
-                                onClick={(e) => {
-                                        e.preventDefault(); 
+                                    onClick={(e) => {
+                                        e.preventDefault();
                                         setIsOpen((prev) => !prev);
-                                    }
-                                }
-                                className="bg-gray-100 px-4 py-1 mt-2 w-full flex items-center justify-between rounded-lg tracking-wider border-4 border-transparent active:border-white duration-300s active:text-white"
+                                    }}
+                                    className="bg-gray-100 px-4 py-1 mt-2 w-full flex items-center justify-between rounded-lg tracking-wider border-4 border-transparent active:border-white duration-300s active:text-white"
                                 >
-                                {selectedCategory}
-                                {!isOpen ? <FaCaretDown /> : <FaCaretUp />}
+                                    {selectedCategory}
+                                    {!isOpen ? <FaCaretDown /> : <FaCaretUp />}
                                 </button>
                                 {isOpen && (
                                     <div className="bg-gray-300 absolute top-[5rem] rounded-lg left-0 w-full z-10 pt-2 pb-2">
-                                        <p className="cursor-pointer px-2 py-2 leading-6 hover:bg-gray-400" onClick={()=>handleCategoryChange("Personal")}>
+                                        <p className="cursor-pointer px-2 py-2 leading-6 hover:bg-gray-400" onClick={() => handleCategoryChange("Personal")}>
                                             Personal
                                         </p>
-                                        <p className="cursor-pointer px-2 py-2 leading-6 hover:bg-gray-400" onClick={()=>handleCategoryChange("Home")}>
+                                        <p className="cursor-pointer px-2 py-2 leading-6 hover:bg-gray-400" onClick={() => handleCategoryChange("Home")}>
                                             Home
                                         </p>
-                                        <p className="cursor-pointer px-2 py-2 leading-6 hover:bg-gray-400" onClick={()=>handleCategoryChange("Buisness")}>
+                                        <p className="cursor-pointer px-2 py-2 leading-6 hover:bg-gray-400" onClick={() => handleCategoryChange("Buisness")}>
                                             Business
                                         </p>
                                     </div>
@@ -93,7 +107,7 @@ const AddNote = ({onClose}) => {
                             <div className="pt-4">
                                 <div className="flex justify-between mb-2">
                                     <label htmlFor="description" className="block">
-                                    Description (optional)
+                                        Description (optional)
                                     </label>
                                     <span>{textCount}/200</span>
                                 </div>
@@ -106,11 +120,11 @@ const AddNote = ({onClose}) => {
                                     onChange={handleTextAreaChange}
                                     value={textarea}
                                 />
-                                </div>
-                                <div className="flex justify-end gap-3 pt-3">
+                            </div>
+                            <div className="flex justify-end gap-3 pt-3">
                                 <button className="text-gray-500" onClick={onClose}>Cancel</button>
                                 <button className="flex gap-1 text-white items-center justify-center bg-[#42A5F5] hover:bg-[#2196F8] active: rounded-full h-[40px] w-[80px]">
-                                    Add
+                                    {type === "add" ? "Add" : "Edit"}
                                 </button>
                             </div>
                         </div>
@@ -121,4 +135,4 @@ const AddNote = ({onClose}) => {
     );
 };
 
-export default AddNote;
+export default NoteForm;

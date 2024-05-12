@@ -1,5 +1,6 @@
 package com.notely.notely.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -55,6 +56,27 @@ public class NoteService {
             if (noteOptional.isPresent()) {
                 Note note = noteOptional.get();
                 note.setCompleted(completed);
+                noteRespository.save(note);
+                return ResponseEntity.status(HttpStatus.OK).body("Note updated successfully");
+            } 
+            else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Note not found");
+            }
+        } catch (DataAccessException ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update category");
+        }
+    }
+
+    public ResponseEntity<String> updateNote(UUID id, Note newNote) {
+        try {
+            Optional<Note> optionalNote = noteRespository.findById(id);
+            if (optionalNote.isPresent()) {
+                Note note = optionalNote.get();
+                note.setTitle(newNote.getTitle());
+                note.setContent(newNote.getContent());
+                note.setCategory(newNote.getCategory());
+                note.setUpdatedAt(LocalDateTime.now());
                 noteRespository.save(note);
                 return ResponseEntity.status(HttpStatus.OK).body("Note updated successfully");
             } else {
