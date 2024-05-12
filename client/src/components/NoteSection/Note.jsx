@@ -1,9 +1,10 @@
 import { Fragment, useState } from "react";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { useDispatch } from 'react-redux';
-import { updateNoteCompleted, deleteNote} from "../../features/note/noteSlice";
+import { updateNoteCompleted} from "../../features/note/noteSlice";
 import NoteForm from "./NoteForm";
 import Backdrop from "../UI/Backdrop";
+import DeleteForm from "../UI/DeleteForm";
 
 const Note = ({ note }) => {
     const dispatch = useDispatch();    
@@ -18,6 +19,7 @@ const Note = ({ note }) => {
     };
     const [isCompleted, setIsCompleted] = useState(false);
     const [isEditFormVisible, setIsEditFormVisible] = useState(false);
+    const [isDeleteFormVisible, setIsDeleteFormVisible] = useState(false);
 
     const handleCheckCompleted = () => {
         setIsCompleted(!isCompleted);
@@ -25,17 +27,22 @@ const Note = ({ note }) => {
         console.log(isCompleted, id);
     };
 
-    const handleDeleteNote = () => {
-        dispatch(deleteNote(id));
-    };
-
     const handleEditNote = () => {
         setIsEditFormVisible(true);
     };
 
+    const handleDeleteNote = () => {
+        setIsDeleteFormVisible(true);
+    }
+
     const handleCloseEditForm = () => {
         setIsEditFormVisible(false);
     };
+
+    const handleCloseDeleteForm = () => {
+        setIsDeleteFormVisible(false);
+    };
+
 
     return (
         <Fragment>
@@ -58,7 +65,12 @@ const Note = ({ note }) => {
                             checked={isCompleted}
                         />
                         <MdEdit size={20} onClick={handleEditNote} />
-                        <MdDelete onClick={handleDeleteNote} size={20} />
+                        <MdDelete size={20}  onClick={handleDeleteNote}/>
+                        {isDeleteFormVisible && (
+                            <Backdrop isOpen={isDeleteFormVisible} onClose={handleCloseDeleteForm}>
+                                <DeleteForm onClose={handleCloseDeleteForm} id={id}/>
+                            </Backdrop>
+                        )}
                     </div>
                 </div>
                 <p
