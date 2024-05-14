@@ -1,6 +1,7 @@
 import { Fragment , useState} from "react";
 import NoteList from "../NoteSection/NoteList";
-import  {useSelector} from "react-redux"
+import  {useSelector} from "react-redux";
+import emptyHome from "../../assets/emptyHome.svg";
 
 const Tabs = ({ notes, isChecked }) => {
   const completedNotes = useSelector(state => state.note.completedNotes);
@@ -77,6 +78,14 @@ const Tabs = ({ notes, isChecked }) => {
           BUISNESS
         </button>
         <NoteList notes={getNotesForTab()} isChecked={isChecked} />
+        {
+          notes.length === 0 
+          && 
+          <div className="flex justify-center items-center flex-col mt-20">
+            <img src={emptyHome} alt="empty-home" />
+            <p>You don’t have any notes</p>
+          </div>
+        }
       </div>
     </Fragment>
   );

@@ -1,6 +1,5 @@
 import { Fragment, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { useDispatch } from 'react-redux';
 
 const SearchBar = ({onSearch}) => {
     const [query, setQuery] = useState('');
