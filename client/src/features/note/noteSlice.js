@@ -3,6 +3,7 @@ import axios from "axios";
 
 const initialState = {
   notes: [],
+  searchResults: [],
 };
 
 export const fetchNotes = createAsyncThunk(
@@ -30,7 +31,7 @@ export const updateNoteCompleted = createAsyncThunk(
   '/updateNoteCompleted',
   async ({ noteId, isCompleted }) => {
     try {
-      await axios.put(`http://localhost:8080/api/update-completion/${noteId}`, isCompleted);
+      await axios.put(`http://localhost:8080/api/update-completion/${noteId}`, { isCompleted });
       return { noteId, isCompleted };
     } catch (error) {
       throw error;
@@ -61,6 +62,18 @@ export const updateNote = createAsyncThunk(
     }
   }
 );
+
+export const searchNotes = createAsyncThunk(
+  "/searchNote",
+  async (query, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/notes/search?query=${query}`);
+      return response.data;
+    } catch (error) {
+      throw rejectWithValue(error.response.data);
+    }
+  }
+)
 
 export const noteSlice = createSlice({
   name: 'note',
@@ -103,7 +116,7 @@ export const noteSlice = createSlice({
         if (noteToUpdate) {
           noteToUpdate.completed = isCompleted;
         }
-      })      
+      })     
 
       .addCase(deleteNote.fulfilled, (state, action) =>{
         const noteId = action.payload;
@@ -115,6 +128,10 @@ export const noteSlice = createSlice({
         state.notes = state.notes.map(note =>
           note.id === updatedNote.id ? updatedNote : note
         );
+      })
+
+      .addCase(searchNotes.fulfilled, (state, action) => {
+        state.searchResults = action.payload;
       })
   },
 });

@@ -9,12 +9,16 @@ const NoteForm = ({ onClose, type, category , noteId, note}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState("Personal");
     const [textCount, setTextCount] = useState(0);
-    const [textarea, setTextarea] = useState(note.content);
-    const [title, setTitle] = useState(note.title);
+    const noteTitle = note?.title || "";
+    const noteContent = note?.content || "";
+    const [textarea, setTextarea] = useState(noteContent);
+    const [title, setTitle] = useState(noteTitle);
 
     
     useEffect(() => {
-        setSelectedCategory(category);
+        if (category) {
+            setSelectedCategory(category);
+        }
     }, [category]);
 
     const handleCategoryChange = (category) => {

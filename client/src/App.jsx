@@ -6,10 +6,12 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useSelector , useDispatch} from "react-redux";
 import { fetchNotes } from './features/note/noteSlice';
 import NoteForm from './components/NoteSection/NoteForm';
+import { searchNotes } from './features/note/noteSlice';
 
 function MainPage() {
   const dispatch = useDispatch();
   const notes = useSelector(state => state.note.notes);
+  const searchResults = useSelector(state => state.note.searchResults);
   const [isAddNoteVisible, setIsAddNoteVisible] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
@@ -23,11 +25,15 @@ function MainPage() {
 
   useEffect(()=>{
     dispatch(fetchNotes())
-  },[dispatch, notes])
+  },[dispatch, notes]);
+
+  const handleSearch = (query) => {
+    dispatch(searchNotes(query));
+  }
 
   return (
     <Fragment>
-      <Navbar onOpen={toggleAddNote} />
+      <Navbar onOpen={toggleAddNote} onSearch={handleSearch}/>
       {isAddNoteVisible && (
         <Backdrop isOpen={isAddNoteVisible} onClose={toggleAddNote}>
           <NoteForm onClose={toggleAddNote} type="add"/>
@@ -36,7 +42,7 @@ function MainPage() {
       <div className="pl-10 pt-4 relative">
         <p className="font-bold text-xl">Your Notes</p>
         <div className="w-full">
-          <Tabs notes={notes} isChecked={isChecked} />
+          <Tabs notes={searchResults.length ? searchResults : notes} isChecked={isChecked} />
         </div>
         <div className="absolute flex items-center right-20 top-12">
           <input

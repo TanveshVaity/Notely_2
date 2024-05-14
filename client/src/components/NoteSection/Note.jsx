@@ -23,8 +23,7 @@ const Note = ({ note }) => {
 
     const handleCheckCompleted = () => {
         setIsCompleted(!isCompleted);
-        dispatch(updateNoteCompleted({ noteId: id, isCompleted}));
-        console.log(isCompleted, id);
+        dispatch(updateNoteCompleted({ noteId: id, isCompleted: !isCompleted }));
     };
 
     const handleEditNote = () => {
@@ -50,7 +49,7 @@ const Note = ({ note }) => {
                 <div className="flex justify-between">
                     <span
                         className={`text-sm text-bold border rounded-full h-full leading-9 w-24 text-center items-center ${
-                        isCompleted
+                        isCompleted 
                             ? "text-gray-900 bg-gray-400 opacity-35"
                             : categoryColors[category]
                         }`}
