@@ -49,7 +49,7 @@ public class NoteController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/update-completion/{id}")
-    public ResponseEntity<String> updateNoteIsComplete(@PathVariable UUID id, @RequestParam(required = false) Boolean completed) {
+    public ResponseEntity<String> updateNoteIsComplete(@PathVariable UUID id, @RequestParam Boolean completed) {
         return noteService.updateNoteIsComplete(id, completed);
     }
 
@@ -57,4 +57,11 @@ public class NoteController {
     public ResponseEntity<String> updateNote(@PathVariable("id") UUID id,  @RequestBody Note newNote){
         return noteService.updateNote(id, newNote);
     }
+
+    @GetMapping("/notes/search")
+    public ResponseEntity<List<Note>> searchNotes(@RequestParam String query) {
+        List<Note> searchResults = noteService.searchNotes(query);
+        return ResponseEntity.ok(searchResults);
+    }
+    
 }

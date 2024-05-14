@@ -57,14 +57,14 @@ public class NoteService {
                 Note note = noteOptional.get();
                 note.setCompleted(completed);
                 noteRespository.save(note);
-                return ResponseEntity.status(HttpStatus.OK).body("Note updated successfully");
+                return ResponseEntity.status(HttpStatus.OK).body("Note completion updated successfully");
             } 
             else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Note not found");
             }
         } catch (DataAccessException ex) {
             ex.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update category");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update completion");
         }
     }
 
@@ -87,5 +87,9 @@ public class NoteService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update note");
         }
     }
+
+    public List<Note> searchNotes(String query){
+        return noteRespository.findByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(query, query);
+    }   
 }
 
