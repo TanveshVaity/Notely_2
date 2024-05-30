@@ -2,6 +2,9 @@ package com.notely.notely.entity;
 
 import lombok.*;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -23,13 +26,18 @@ public class Note {
 
     private String category;
 
+    @Column(name = "file_url")
+    private String fileUrl;
+
     @Column(name = "is_completed")
     private boolean completed = false;
 
     @Column(name = "created_at")
+    @CreatedDate
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
 

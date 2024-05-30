@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.notely.notely.entity.Note;
 
 
-public interface NoteRespository extends JpaRepository<Note, UUID>{
+public interface NoteRepository extends JpaRepository<Note, UUID>{
     List<Note> findByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(String title, String content);
 
 }
